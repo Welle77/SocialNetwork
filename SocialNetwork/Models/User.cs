@@ -25,5 +25,15 @@ namespace SocialNetwork.Models
 
         [BsonElement("Friends")]
         public List<User> Friends { get; set; }
+
+
+        //Singleton pattern for user
+        private static readonly User Instance = new User();
+        private User() { }
+
+        public static User GetUser()
+        {
+            return Instance;
+        }
     }
 }

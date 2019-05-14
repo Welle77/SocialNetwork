@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.IdGenerators;
+using SocialNetwork.Application;
 using SocialNetwork.Models;
 using SocialNetwork.Services;
 
@@ -14,7 +15,8 @@ namespace SocialNetwork
     {
         static void Main(string[] args)
         {
-
+            var app = new SocialNetworkApplication();
+            app.Start();
         }
     }
 }
