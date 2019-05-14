@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SocialNetwork.Services;
 
 namespace SocialNetwork
 {
@@ -11,7 +10,8 @@ namespace SocialNetwork
     {
         static void Main(string[] args)
         {
-            
+             var socialNetwork = new SocialNetworkApplication();
+             socialNetwork.Start();
         }
     }
 }
