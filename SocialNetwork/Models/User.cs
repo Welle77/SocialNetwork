@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,12 @@ namespace SocialNetwork.Models
         [BsonElement("Name")]
         public string Name { get; set; }
 
+        [BsonElement("Gender")]
+        public char Gender { get; set; }
+
+        [BsonElement("Age")]
+        public int Age { get; set; }
+
         [BsonElement("BlockedList")]
         public List<User> BlockedList { get; set; }
 
@@ -25,15 +32,5 @@ namespace SocialNetwork.Models
 
         [BsonElement("Friends")]
         public List<User> Friends { get; set; }
-
-
-        //Singleton pattern for user
-        private static readonly User Instance = new User();
-        private User() { }
-
-        public static User GetUser()
-        {
-            return Instance;
-        }
     }
 }
