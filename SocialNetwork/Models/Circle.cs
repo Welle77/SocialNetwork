@@ -8,19 +8,14 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace SocialNetwork.Models
 {
-    public class User
+    public class Circle
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("BlockedList")]
-        public List<User> BlockedList { get; set; }
+        [BsonElement("Members")]
+        public List<User> Members { get; set; }
 
-        [BsonElement("Circles")]
-        public List<Circle> Circles { get; set; }
-
-        [BsonElement("Friends")]
-        public List<User> Friends { get; set; }
     }
 }
