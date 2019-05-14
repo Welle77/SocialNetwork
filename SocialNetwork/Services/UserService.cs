@@ -16,5 +16,11 @@ namespace SocialNetwork.Services
         {
             _users = Client.GetCollection<User>("Users");
         }
+
+        public void AddUser(User userToBeAdded)
+        {
+            _users.InsertOne(userToBeAdded);
+        }
+
     }
 }
