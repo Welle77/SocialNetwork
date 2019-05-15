@@ -45,14 +45,13 @@ namespace SocialNetwork.Services
             {
                 var result = _users.Find(p => p.Id == objectId).ToList()[0];
                 var userFound = CurrentUser.Friends.Remove(result);
+                _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Something bad happened (User might not exist)");
             }
         }
-        
-
 
         
         public void BlockUser(string objectId)
@@ -66,13 +65,32 @@ namespace SocialNetwork.Services
             catch (Exception e)
             {
                 Console.WriteLine("Something bad happened (User might not exist)");
+            }   
+        }
+        
+        public void UnblockUser(string objectId)
+        {
+            try
+            {
+                var result = _users.Find(p => p.Id == objectId).ToList()[0];
+                var userFound = CurrentUser.BlockedList.Remove(result);
+                _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
             }
-            
+            catch(Exception e)
+            {
+                Console.WriteLine("Something bad happened (User might not exist)");
+            }
         }
 
         public void SignUpForCircle(Circle circle)
         {
             CurrentUser.Circles.Add(circle);
+            _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
+        }
+
+        public void RemoveFromCircle(Circle circle)
+        {
+            CurrentUser.Circles.Remove(circle);
             _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
         }
 

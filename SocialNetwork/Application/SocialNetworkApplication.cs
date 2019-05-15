@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using MongoDB.Bson;
 using SocialNetwork.Models;
 using SocialNetwork.Services;
@@ -17,12 +18,19 @@ namespace SocialNetwork.Application
             _userService=new UserService(objectId);
             _postService=new PostService();
             _circleService = new CircleService();
+
+            SetUpDatabase();
+        }
+
+        private void SetUpDatabase()
+        {
+            //Wipe database
+            //Seed database
         }
 
         public void Start()
         {
             Console.WriteLine("Navn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
-            
             Console.WriteLine("To see your feed, type 'Feed'");
             Console.WriteLine("To see your friends wall, type 'Wall'");
             Console.WriteLine("To create a post, type 'CPost'");
