@@ -24,7 +24,6 @@ namespace SocialNetwork.Services
         {
             _users.InsertOne(userToBeAdded);
         }
-
         
         public void AddFriend(string objectId)
         {
@@ -39,7 +38,21 @@ namespace SocialNetwork.Services
                 Console.WriteLine("Something bad happened (User might not exist)");
             }
         }
+
+        public void RemoveFriend(string objectId)
+        {
+            try
+            {
+                var result = _users.Find(p => p.Id == objectId).ToList()[0];
+                var userFound = CurrentUser.Friends.Remove(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Something bad happened (User might not exist)");
+            }
+        }
         
+
 
         
         public void BlockUser(string objectId)
