@@ -18,31 +18,6 @@ namespace SocialNetwork.Services
             Client.DropCollection("Circles");
             
             _circles = Client.GetCollection<Circle>("Circles");
-            SeedDatabase();
-        }
-
-        private void SeedDatabase()
-        {
-            CreateCircle(new Circle
-            {
-                Id=ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                CircleName = "Buy and sell old shit",
-                Members=new List<User>(),
-            });
-
-            CreateCircle(new Circle
-            {
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                CircleName = "Meet new people",
-                Members = new List<User>(),
-            });
-
-            CreateCircle(new Circle
-            {
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                CircleName = "Discuss important things",
-                Members = new List<User>(),
-            });
         }
 
         public List<Circle> Get()

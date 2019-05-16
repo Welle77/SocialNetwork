@@ -18,56 +18,7 @@ namespace SocialNetwork.Services
         public UserService()
         {
             Client.DropCollection("Users");
-            _users = Client.GetCollection<User>("Users");
-            SeedDatabase();
-           
-        }
-
-        private void SeedDatabase()
-        {
-            AddUser(new User
-            {
-                Age = 23,
-                BlockedList = new List<User>(),
-                Circles = new List<Circle>(),
-                Friends = new List<User>(),
-                Gender = 'm',
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                Name = "Jens Jensen"
-            });
-
-            AddUser(new User
-            {
-                Age = 15,
-                BlockedList = new List<User>(),
-                Circles = new List<Circle>(),
-                Friends = new List<User>(),
-                Gender = 'f',
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                Name = "Sine Sunesen"
-            });
-
-            AddUser(new User
-            {
-                Age = 45,
-                BlockedList = new List<User>(),
-                Circles = new List<Circle>(),
-                Friends = new List<User>(),
-                Gender = 'm',
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                Name = "Perv Pervsen"
-            });
-
-            AddUser(new User
-            {
-                Age = 34,
-                BlockedList = new List<User>(),
-                Circles = new List<Circle>(),
-                Friends = new List<User>(),
-                Gender = 'f',
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                Name = "Line Lystig"
-            });
+            _users = Client.GetCollection<User>("Users");        
         }
 
         public void AddUser(User userToBeAdded)

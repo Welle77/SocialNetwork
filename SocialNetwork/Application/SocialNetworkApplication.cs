@@ -182,5 +182,123 @@ namespace SocialNetwork.Application
 
             return contentType;
         }
+
+        private void SeedDatabase()
+        {
+            User Jens = new User
+            {
+                Age = 23,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle>(),
+                Friends = new List<User>(),
+                Gender = 'm',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Jens Jensen"
+            };
+            User Sine = new User
+            {
+                Age = 15,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle>(),
+                Friends = new List<User>(),
+                Gender = 'f',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Sine Sunesen"
+            };
+            User Perv = new User
+            {
+                Age = 45,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle>(),
+                Friends = new List<User>(),
+                Gender = 'm',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Perv Pervsen"
+            };
+            User Line = new User
+            {
+                Age = 34,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle>(),
+                Friends = new List<User>(),
+                Gender = 'f',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Line Lystig"
+            };
+
+            _userService.AddUser(Jens);
+            _userService.AddUser(Sine);
+            _userService.AddUser(Perv);
+            _userService.AddUser(Line);
+
+            Circle OldShit = new Circle
+            {
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                CircleName = "Buy and sell old shit",
+                Members = new List<User>(),
+            };
+            Circle People = new Circle
+            {
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                CircleName = "Meet new people",
+                Members = new List<User>(),
+            };
+            Circle Important = new Circle
+            {
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                CircleName = "Discuss important things",
+                Members = new List<User>(),
+            };
+
+            _circleService.CreateCircle(OldShit);
+            _circleService.CreateCircle(People);
+            _circleService.CreateCircle(Important);
+
+            Post PostPs = new Post
+            {
+                AssociatedCircle = OldShit,
+                Author = Jens,
+                Comments = new List<Comment>(),
+                Content = "Playstation 3 for sale!",
+                ContentType = "text",
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString()
+            };
+            Post PostSine = new Post
+            {
+                AssociatedCircle = People,
+                Author = Line,
+                Comments = new List<Comment>(),
+                Content = "I'd like to meet new people plz",
+                ContentType = "text",
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString()
+            };
+            Post PostImportant1 = new Post
+            {
+                AssociatedCircle = Important,
+                Author = Line,
+                Comments = new List<Comment>(),
+                Content = "The world is dying",
+                ContentType = "text",
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString()
+            };
+            Post PostImportant2 = new Post
+            {
+                AssociatedCircle = Important,
+                Author = Perv,
+                Comments = new List<Comment>(),
+                Content = "Trump is a bastard",
+                ContentType = "text",
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString()
+            };
+            Post PostImageOldShit = new Post
+            {
+                AssociatedCircle = OldShit,
+                Author = Jens,
+                Comments = new List<Comment>(),
+                Content = "imageServer.com/img.png",
+                ContentType = "image",
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString()
+            };
+        }
     }
 }
