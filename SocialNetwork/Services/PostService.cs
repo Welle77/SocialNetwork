@@ -88,5 +88,9 @@ namespace SocialNetwork.Services
                 Console.WriteLine("The post of type " + post.ContentType +" contains " + post.Content);
             }
         }
+        public void PrintPicture()
+        {
+            Console.WriteLine("*******\n\n\n\n\n*******\nPicture of food");
+        }
     }
 }
