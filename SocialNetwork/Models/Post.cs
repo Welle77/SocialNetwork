@@ -10,6 +10,11 @@ namespace SocialNetwork.Models
 {
     public class Post
     {
+        public Post()
+        {
+            CreationTime = DateTime.Now;
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -28,5 +33,8 @@ namespace SocialNetwork.Models
 
         [BsonElement("Comments")]
         public List<Comment> Comments { get; set; }
+
+        [BsonElement("Time of creation")]
+        public DateTime CreationTime { get; set; }
     }
 }

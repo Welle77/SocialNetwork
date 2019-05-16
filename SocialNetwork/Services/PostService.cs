@@ -97,25 +97,37 @@ namespace SocialNetwork.Services
                 {
                     Console.WriteLine("This post has no Type");
                 }
+
+                Console.WriteLine("");
             }
         }
 
         public void PrintTextPost(Post post)
         {
-            if(post.AssociatedCircle.CircleName!=null)
+            if(post.AssociatedCircle!=null)
                 Console.WriteLine("Posted in the circle " + post.AssociatedCircle.CircleName+":");
-            Console.WriteLine("Posted by: " + post.Author.Name);
+            Console.WriteLine("Posted by: " + post.Author.Name + " at " + post.CreationTime.ToString());
             Console.WriteLine( "The textpost contains " + post.Content);
+            Console.WriteLine("Comments:");
+            foreach (var comment in post.Comments)
+            {
+                Console.WriteLine("Author "+ comment.Author + " wrote: \t" + comment.Text);
+            }
         }
 
         public void PrintPicturePost(Post post)
         {
-            if(post.AssociatedCircle.CircleName != null)
+            if(post.AssociatedCircle != null)
                 Console.WriteLine("Posted in the circle " + post.AssociatedCircle.CircleName+":");
-            Console.WriteLine("Posted by: " + post.Author.Name);
+            Console.WriteLine("Posted by: " + post.Author.Name + " at " + post.CreationTime.ToString());
             Console.WriteLine("****************************************\n\n\n");
             Console.WriteLine("***\t" + post.Content + "\t***");
             Console.WriteLine("\n\n\n****************************************");
+            Console.WriteLine("Comments:");
+            foreach (var comment in post.Comments)
+            {
+                Console.WriteLine("Author " + comment.Author + " wrote: \t" + comment.Text);
+            }
         }
 
         public List<Post> GetFeed(User user)
@@ -133,6 +145,10 @@ namespace SocialNetwork.Services
             {
                 CirclePostList.AddRange(GetPostsByCircleId(currentUserCircle.Id));
             }
+
+            ResultingList.AddRange(GetPostsByAuthorId(user.Id));
+
+
 
             foreach (var feedPost in FriendPostList)
             {
@@ -163,8 +179,17 @@ namespace SocialNetwork.Services
                 }
 
                 if (!isBlocked)
-                    ResultingList.Add(circlePost);
+                {
+                    foreach (var post in ResultingList)
+                    {
+                        if (post.Id == circlePost.Id) continue;
+                        ResultingList.Add(circlePost);
+                    }
+                }
+                    
             }
+
+            ResultingList.Sort(delegate(Post post, Post post1) { return post1.CreationTime.CompareTo(post.CreationTime); });
 
             return ResultingList;
         }

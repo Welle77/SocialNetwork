@@ -99,7 +99,7 @@ namespace SocialNetwork.Application
             do
             {
                 contentType = Console.ReadLine();
-            } while (contentType != "image" || contentType != "text");
+            } while (contentType != "image" && contentType != "text");
 
             return contentType;
         }
@@ -153,8 +153,10 @@ namespace SocialNetwork.Application
         private void CreatePost()
         {
             Console.WriteLine("If this is part of a circle, type in the name of the circle. Otherwise just press enter.");
+            _userService.PrintUserCircles();
             var circleCPost = Console.ReadLine();
             Circle associatedCircle = null;
+
             if (circleCPost != "")
             {
                 var circle = _userService.GetUserCircleByName(circleCPost);
@@ -173,7 +175,7 @@ namespace SocialNetwork.Application
                 AssociatedCircle = associatedCircle,
                 Content = contentCPost,
                 Author = _userService.CurrentUser,
-                Comments = null
+                Comments = new List<Comment>(),
             };
 
             _postService.AddPost(post);
