@@ -86,7 +86,8 @@ namespace SocialNetwork.Services
         {
             foreach (var post in posts)
             {
-                Console.WriteLine("The post of type " + post.ContentType +" contains " + post.Content);
+                var i = 0;
+                Console.WriteLine("Post #" + ++i + ": The post of type " + post.ContentType +" contains " + post.Content);
             }
         }
         public void PrintPicture()
