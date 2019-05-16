@@ -11,10 +11,23 @@ namespace SocialNetwork.Services
     public class CircleService : BaseService
     {
         private readonly IMongoCollection<Circle> _circles;
-
-        public CircleService()
+ public CircleService()
         {
             _circles = Client.GetCollection<Circle>("Circles");
+        }
+
+        public List<Circle> get()
+        {
+            return _circles.Find(circles => true).ToList();
+        }
+       
+        public void CreateCircle(Circle circles, string navn)
+        {
+            _circles.InsertOne(circles);
+        }
+        public void RemoveCircle(string id)
+        {
+            _circles.DeleteOne(circle => circle.Id == id);
         }
     }
 }
