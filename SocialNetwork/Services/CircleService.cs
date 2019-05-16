@@ -71,5 +71,13 @@ namespace SocialNetwork.Services
                 Console.WriteLine(circle.CircleName);
             }
         }
+
+        public void CreateIndex()
+        {
+            //Index on circles name
+            var indexKeysName = Builders<Circle>.IndexKeys;
+            var indexModelName = new CreateIndexModel<Circle>(indexKeysName.Ascending(c => c.CircleName));
+            _circles.Indexes.CreateOne(indexModelName);
+        }
     }
 }

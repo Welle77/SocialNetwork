@@ -18,14 +18,14 @@ namespace SocialNetwork.Services
         public UserService()
         {
             Client.DropCollection("Users");
-            _users = Client.GetCollection<User>("Users");        
+            _users = Client.GetCollection<User>("Users");
         }
 
         public void AddUser(User userToBeAdded)
         {
             _users.InsertOne(userToBeAdded);
         }
-        
+
         public void AddFriend(string objectId)
         {
             try
@@ -54,7 +54,7 @@ namespace SocialNetwork.Services
             }
         }
 
-        
+
         public void BlockUser(string objectId)
         {
             try
@@ -66,9 +66,9 @@ namespace SocialNetwork.Services
             catch (Exception e)
             {
                 Console.WriteLine("Something bad happened (User might not exist)");
-            }   
+            }
         }
-        
+
         public void UnblockUser(string objectId)
         {
             try
@@ -77,7 +77,7 @@ namespace SocialNetwork.Services
                 var userFound = CurrentUser.BlockedList.Remove(result);
                 _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Something bad happened (User might not exist)");
             }
@@ -127,14 +127,13 @@ namespace SocialNetwork.Services
         public void PrintUserFriends()
         {
             foreach (var friend in CurrentUser.Friends)
-            {
+            {               
                 Console.WriteLine(friend.Name);
             }
         }
 
         public User GetUser(string objectId)
         {
-
             try
             {
                 var result = _users.Find(p => p.Id == objectId).ToList()[0];
@@ -168,6 +167,13 @@ namespace SocialNetwork.Services
 
             return false;
         }
-        
+
+        public void CreateIndex()
+        {
+            //Index on users name
+            var indexKeysName = Builders<User>.IndexKeys;
+            var indexModelName = new CreateIndexModel<User>(indexKeysName.Ascending(u => u.Name));
+            _users.Indexes.CreateOne(indexModelName);
+        }     
     }
 }

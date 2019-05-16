@@ -32,7 +32,7 @@ namespace SocialNetwork.Services
 
             //Index on associatedCircles CircleId
             var indexKeysCircle = Builders<Post>.IndexKeys;
-            var indexModelCircle = new CreateIndexModel<Post>(indexKeysCircle.Ascending(p => p.AssociatedCircle));
+            var indexModelCircle = new CreateIndexModel<Post>(indexKeysCircle.Ascending(p => p.AssociatedCircle.Id));
             _posts.Indexes.CreateOne(indexModelCircle);
         }
 
@@ -134,17 +134,18 @@ namespace SocialNetwork.Services
 
             foreach (var feedPost in FriendPostList)
             {
-                ResultingList.Add(feedPost);
+                if (!feedPost.Author.BlockedList.Contains(user))
+                    ResultingList.Add(feedPost);
             }
 
             foreach (var circlePost in CirclePostList)
             {
                 if (!ResultingList.Contains(circlePost))
                 {
-                    ResultingList.Add(circlePost);
+                    if (!circlePost.Author.BlockedList.Contains(user))
+                        ResultingList.Add(circlePost);
                 }
             }
-
             return ResultingList;
         }
     }
