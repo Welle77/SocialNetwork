@@ -72,9 +72,15 @@ namespace SocialNetwork.Services
                 Console.WriteLine("Something bad happened (Post might not exist)");
             }
         }
+
         public List<Post> GetPostsByAuthorId(string Id)
         {
             return _posts.Find(p => p.Author.Id == Id).ToList();
+        }
+
+        public List<Post> GetWallById(string Id)
+        {
+            return _posts.Find(p => p.Author.Id == Id && p.AssociatedCircle==null).ToList();
         }
 
         public List<Post> GetPostsByCircleId(string Id)

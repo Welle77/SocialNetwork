@@ -139,7 +139,7 @@ namespace SocialNetwork.Application
                 if (!_userService.IsThisUserBlocked(userId))
                 {
                     Console.WriteLine("Wall of " + nameOfUser);
-                    var wallPosts = _postService.GetPostsByAuthorId(userId);
+                    var wallPosts = _postService.GetWallById(userId);
 
                     _postService.PrintPosts(wallPosts);
                 }
@@ -431,6 +431,7 @@ namespace SocialNetwork.Application
         private void BlockUser()
         {
             Console.WriteLine("Type the name of the user, you want to block");
+
             var list = _userService.GetAllOtherUsers();
             foreach (var user in list)
             {

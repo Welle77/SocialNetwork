@@ -63,11 +63,6 @@ namespace SocialNetwork.Services
             _circles.InsertOne(circle);
         }
 
-        public void RemoveCircle(string id)
-        {
-            _circles.DeleteOne(circle => circle.Id == id);
-        }
-
         public void PrintCircles(List<Circle> circles)
         {
             foreach (var circle in circles)
