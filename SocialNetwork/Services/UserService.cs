@@ -18,8 +18,9 @@ namespace SocialNetwork.Services
         public UserService()
         {
             Client.DropCollection("Users");
-            SeedDatabase();
             _users = Client.GetCollection<User>("Users");
+            SeedDatabase();
+           
         }
 
         private void SeedDatabase()
