@@ -28,7 +28,17 @@ namespace SocialNetwork.Application
             newUser.Name = inputName;
             Console.WriteLine("What is your age?");
             var inputAge = Console.ReadLine();
-            newUser.Age = int.Parse(inputAge);
+
+            try
+            {
+                newUser.Age = int.Parse(inputAge);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Age value not valid. Your age is set to 18");
+                newUser.Age = 18;
+            }
+            
             Console.WriteLine("Type f for female, m for male (Yes there are only two genders)");
             var inputGender = Console.ReadKey();
 
@@ -48,7 +58,7 @@ namespace SocialNetwork.Application
         {
             SetUpCurrentUser();
 
-            Console.WriteLine("Navn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
+            Console.WriteLine("\nNavn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
             Console.WriteLine("To see your feed, type 'Feed'");
             Console.WriteLine("To see your friends wall, type 'Wall'");
             Console.WriteLine("To create a post, type 'CPost'");
@@ -67,96 +77,21 @@ namespace SocialNetwork.Application
                 switch (input)
                 {
                     case "Feed":
-                        Console.WriteLine("Your public feed looks like this:");
-                        foreach (var currentUserFriend in _userService.CurrentUser.Friends)
-                        {
-                            var list = _postService.GetPostsByAuthorId(currentUserFriend.Id);
-                            _postService.PrintPosts(list);
-                        }
-
-                        //Console.WriteLine("Your circle feed looks like this");
-                        //foreach (var currentUserCircle in _userService.CurrentUser.Circles)
-                        //{
-                        //    var list = _postService.GetPostsByCircleId(currentUserCircle.Id);
-                        //    _postService.PrintPosts(list);
-                        //}
+                        PrintFeed();
                         break;
 
                     case "Wall":
-                        Console.WriteLine("Type the name of the users wall you want to see.");
-                        foreach (var currentUserFriend in _userService.CurrentUser.Friends)
-                        {
-                            Console.WriteLine(currentUserFriend.Name);
-                        }
-
-                        var nameOfWall = Console.ReadLine();
-                        var userId = _userService.GetUserByName(nameOfWall);
-
-                        var wallPosts = _postService.GetPostsByAuthorId(userId);
-                        _postService.PrintPosts(wallPosts);
+                        PrintUserWall();
                         break;
 
                     case "Circles":
-                        Console.WriteLine("Type the name of the circle you want to see the feed for.");
-                        foreach (var currentUserCircle in _userService.CurrentUser.Circles)
-                        {
-                            Console.WriteLine(currentUserCircle.CircleName);
-                        }
-
-                        var nameOfCircle = Console.ReadLine();
-                        var circleId = _userService.GetCircleByName(nameOfCircle);
-
-                        var circlePosts = _postService.GetPostsByCircleId(circleId);
-                        _postService.PrintPosts(circlePosts);
-
-
+                        PrintCircleFeed();
                         break;
                     case "CPost":
-                        Console.WriteLine("If this is part of a circle, type in the name of the circle. Otherwise just press enter.");
-                        var circleCPost = Console.ReadLine();
-                        Circle associatedCircle = null;
-                        if (circleCPost != "")
-                        {
-                            var circle = _userService.GetCircleByName(circleCPost);
-                            associatedCircle = _circleService.GetCircle(circle);
-                        }
-
-                        Console.WriteLine("Choose the type of Content. The supported type is image, text");
-                        var contentType = ContentType();
-
-                        Console.WriteLine("Type the content of the post");
-                        var contentCPost = Console.ReadLine();
-
-                        var post = new Post
-                        {
-                            ContentType = contentType,
-                            AssociatedCircle = associatedCircle,
-                            Content = contentCPost,
-                            Author = _userService.CurrentUser,
-                            Comments = null
-                        };
-
-                        _postService.AddPost(post);
+                        CreatePost();
                         break;
                     case "Comment":
-                        Console.WriteLine("Which post do you want to comment on? Type the #");
-                        Console.WriteLine("Your public feed looks like this");
-                            foreach (var currentUserFriends in _userService.CurrentUser.Friends)
-                            {
-                                var list = _postService.GetPostsByAuthorId(currentUserFriends.Id);
-                                _postService.PrintPosts(list);
-                            }
-
-                        var postNumber = Console.ReadLine();
-                        Console.WriteLine("Enter your comment.");
-                        var comment = Console.ReadLine();
-                        var commentToBeAdded = new Comment()
-                        {
-                            Author = _userService.CurrentUser,
-                            Text = comment
-                        };
-
-                        _postService.PostComment(postNumber,commentToBeAdded);                            
+                        CreateComment();                          
 
                         break;
                     case "Info":
@@ -172,7 +107,9 @@ namespace SocialNetwork.Application
             } while (true);
         }
 
-        private string ContentType()
+        #region Helpers
+
+        private string GetContentType()
         {
             string contentType;
             do
@@ -182,5 +119,112 @@ namespace SocialNetwork.Application
 
             return contentType;
         }
+
+        private void PrintFeed()
+        {
+            Console.WriteLine("Your public feed looks like this:");
+            var feedPosts = _postService.GetFeed(_userService.CurrentUser);
+            _postService.PrintPosts(feedPosts);
+        }
+
+        private void PrintUserWall()
+        {
+            Console.WriteLine("Type the name of the users wall you want to see.");
+            _userService.PrintUserFriends();
+
+            var nameOfUser = Console.ReadLine();
+            var userId = _userService.GetUserIdByName(nameOfUser);
+
+            if (userId != null)
+            {
+                var wallPosts = _postService.GetPostsByAuthorId(userId);
+                _postService.PrintPosts(wallPosts);
+            }
+            else
+            {
+                Console.WriteLine("User not found");
+            }
+        }
+
+        private void PrintCircleFeed()
+        {
+            Console.WriteLine("Type the name of the circle you want to see the feed for.");
+            _userService.PrintUserCircles();
+
+            var nameOfCircle = Console.ReadLine();
+            var circle = _userService.GetUserCircleByName(nameOfCircle);
+
+            var circlePosts = _postService.GetPostsByCircleId(circle.Id);
+            _postService.PrintPosts(circlePosts);
+        }
+
+        private void CreatePost()
+        {
+            Console.WriteLine("If this is part of a circle, type in the name of the circle. Otherwise just press enter.");
+            var circleCPost = Console.ReadLine();
+            Circle associatedCircle = null;
+            if (circleCPost != "")
+            {
+                var circle = _userService.GetUserCircleByName(circleCPost);
+                associatedCircle = _circleService.GetCircle(circle.Id);
+            }
+
+            Console.WriteLine("Choose the type of Content. The supported type is image, text");
+            var contentType = GetContentType();
+
+            Console.WriteLine("Type the content of the post");
+            var contentCPost = Console.ReadLine();
+
+            var post = new Post
+            {
+                ContentType = contentType,
+                AssociatedCircle = associatedCircle,
+                Content = contentCPost,
+                Author = _userService.CurrentUser,
+                Comments = null
+            };
+
+            _postService.AddPost(post);
+        }
+
+        private void CreateComment()
+        {
+            Console.WriteLine("Which post do you want to comment on? Type the #");
+            Console.WriteLine("Your public feed looks like this:");
+
+            var feedPosts = _postService.GetFeed(_userService.CurrentUser);
+            _postService.PrintPosts(feedPosts);
+
+            var input = Console.ReadLine();
+            int postNumber;
+
+            try
+            {
+                postNumber = int.Parse(input);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("You did not type a number");
+                return;
+            }
+
+            if (postNumber < 1 || postNumber > feedPosts.Count)
+            {
+                Console.WriteLine("The specified post does not exist");
+                return;
+            }
+
+            Console.WriteLine("Enter your comment.");
+            var comment = Console.ReadLine();
+            var commentToBeAdded = new Comment()
+            {
+                Author = _userService.CurrentUser,
+                Text = comment
+            };
+
+            _postService.PostComment(feedPosts[postNumber-1].Id, commentToBeAdded);
+        }
+
+        #endregion
     }
 }

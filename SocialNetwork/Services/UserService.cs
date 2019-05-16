@@ -144,22 +144,13 @@ namespace SocialNetwork.Services
             _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
         }
 
-        public string GetCircleByName(string name)
+        public Circle GetUserCircleByName(string name)
         {
-            try
-            {
-                var circle = _users.Find(p => p.Name == name).ToList()[0];
-                return circle.Id;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Circle not found");
-            }
-
-            return null;
+            var circle = CurrentUser.Circles.Find(p => p.CircleName == name);
+            return circle;
         }
 
-        public string GetUserByName(string name)
+        public string GetUserIdByName(string name)
         {
             try
             {
@@ -172,6 +163,22 @@ namespace SocialNetwork.Services
             }
 
             return null;
+        }
+
+        public void PrintUserCircles()
+        {
+            foreach (var circle in CurrentUser.Circles)
+            {
+                Console.WriteLine(circle.CircleName);
+            }
+        }
+
+        public void PrintUserFriends()
+        {
+            foreach (var friend in CurrentUser.Friends)
+            {
+                Console.WriteLine(friend.Name);
+            }
         }
 
         public User GetUser(string objectId)
