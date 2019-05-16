@@ -133,17 +133,18 @@ namespace SocialNetwork.Services
 
             foreach (var feedPost in FriendPostList)
             {
-                ResultingList.Add(feedPost);
+                if (!feedPost.Author.BlockedList.Contains(user))
+                    ResultingList.Add(feedPost);
             }
 
             foreach (var circlePost in CirclePostList)
             {
                 if (!ResultingList.Contains(circlePost))
                 {
-                    ResultingList.Add(circlePost);
+                    if (!circlePost.Author.BlockedList.Contains(user))
+                        ResultingList.Add(circlePost);
                 }
             }
-
             return ResultingList;
         }
     }
