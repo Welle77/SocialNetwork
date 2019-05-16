@@ -33,6 +33,20 @@ namespace SocialNetwork.Services
         {
             return _circles.Find(circles => true).ToList();
         }
+
+        public Circle GetCircle(string circleid)
+        {
+            try
+            {
+                var result = _circles.Find(p => p.Id == circleid).ToList()[0];
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Something bad happened (Circle might not exist)");
+            }
+            return null;
+        }
        
         public void CreateCircle(Circle circle)
         {

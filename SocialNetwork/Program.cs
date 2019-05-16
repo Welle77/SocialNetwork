@@ -18,8 +18,6 @@ namespace SocialNetwork
             
             var app = new SocialNetworkApplication();
             app.Start();
-            
-
         }
     }
 }
