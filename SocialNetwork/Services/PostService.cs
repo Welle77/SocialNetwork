@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -111,7 +112,7 @@ namespace SocialNetwork.Services
             Console.WriteLine("Comments:");
             foreach (var comment in post.Comments)
             {
-                Console.WriteLine("Author "+ comment.Author + " wrote: \t" + comment.Text);
+                Console.WriteLine("Author "+ comment.Author.Name + " wrote: " + comment.Text);
             }
         }
 
@@ -120,13 +121,13 @@ namespace SocialNetwork.Services
             if(post.AssociatedCircle != null)
                 Console.WriteLine("Posted in the circle " + post.AssociatedCircle.CircleName+":");
             Console.WriteLine("Posted by: " + post.Author.Name + " at " + post.CreationTime.ToString());
-            Console.WriteLine("****************************************\n\n\n");
+            Console.WriteLine("****************************************\n");
             Console.WriteLine("***\t" + post.Content + "\t***");
-            Console.WriteLine("\n\n\n****************************************");
+            Console.WriteLine("\n****************************************");
             Console.WriteLine("Comments:");
             foreach (var comment in post.Comments)
             {
-                Console.WriteLine("Author " + comment.Author + " wrote: \t" + comment.Text);
+                Console.WriteLine("Author " + comment.Author.Name + " wrote: " + comment.Text);
             }
         }
 
@@ -150,11 +151,12 @@ namespace SocialNetwork.Services
 
 
 
-            foreach (var feedPost in FriendPostList)
+            foreach (var friendPost in FriendPostList)
             {
                 bool isBlocked = false;
+                bool isMemberOfGroup = false;
 
-                foreach (var person in feedPost.Author.BlockedList)
+                foreach (var person in friendPost.Author.BlockedList)
                 {
                     if (person.Id == user.Id)
                     {
@@ -162,13 +164,26 @@ namespace SocialNetwork.Services
                     }
                 }
 
-                if(!isBlocked)
-                    ResultingList.Add(feedPost);      
+                if (friendPost.AssociatedCircle != null)
+                {
+                    foreach (var circle in user.Circles)
+                    {
+                        if (friendPost.AssociatedCircle.Id == circle.Id)
+                        {
+                            isMemberOfGroup = true;
+                        }
+                    }
+                }
+
+                if(!isBlocked && isMemberOfGroup)
+                    ResultingList.Add(friendPost);      
+                
             }
 
             foreach (var circlePost in CirclePostList)
             {
                 bool isBlocked = false;
+                bool alreadyExists = false;
 
                 foreach (var person in circlePost.Author.BlockedList)
                 {
@@ -178,15 +193,21 @@ namespace SocialNetwork.Services
                     }
                 }
 
-                if (!isBlocked)
+                foreach (var post in ResultingList)
                 {
-                    foreach (var post in ResultingList)
+                    if (post.Id == circlePost.Id)
                     {
-                        if (post.Id == circlePost.Id) continue;
-                        ResultingList.Add(circlePost);
+                        alreadyExists = true;
                     }
                 }
-                    
+
+                if (isBlocked || alreadyExists)
+                {
+                    continue;
+                }                  
+                
+                ResultingList.Add(circlePost);
+                
             }
 
             ResultingList.Sort(delegate(Post post, Post post1) { return post1.CreationTime.CompareTo(post.CreationTime); });

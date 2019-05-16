@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using MongoDB.Bson;
 using SocialNetwork.Models;
 using SocialNetwork.Services;
@@ -128,7 +129,9 @@ namespace SocialNetwork.Application
             {
                 if (!_userService.IsThisUserBlocked(userId))
                 {
+                    Console.WriteLine("Wall of " + nameOfUser);
                     var wallPosts = _postService.GetPostsByAuthorId(userId);
+
                     _postService.PrintPosts(wallPosts);
                 }
                 else
