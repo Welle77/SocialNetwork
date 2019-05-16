@@ -280,55 +280,6 @@ namespace SocialNetwork.Application
 
         private void SeedDatabase()
         {
-            User Jens = new User
-            {
-                Age = 23,
-                BlockedList = new List<User>(),
-                Circles = new List<Circle>(),
-                Friends = new List<User>(),
-                Gender = 'm',
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                Name = "Jens Jensen"
-            };
-            User Sine = new User
-            {
-                Age = 15,
-                BlockedList = new List<User>(),
-                Circles = new List<Circle>(),
-                Friends = new List<User>(),
-                Gender = 'f',
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                Name = "Sine Sunesen"
-            };
-            User Perv = new User
-            {
-                Age = 45,
-                BlockedList = new List<User>(),
-                Circles = new List<Circle>(),
-                Friends = new List<User>(),
-                Gender = 'm',
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                Name = "Perv Pervsen"
-            };
-            User Line = new User
-            {
-                Age = 34,
-                BlockedList = new List<User>(),
-                Circles = new List<Circle>(),
-                Friends = new List<User>(),
-                Gender = 'f',
-                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
-                Name = "Line Lystig"
-            };
-
-            //Line has blocked Perv
-            Line.BlockedList.Add(Perv);
-
-            _userService.AddUser(Jens);
-            _userService.AddUser(Sine);
-            _userService.AddUser(Perv);
-            _userService.AddUser(Line);
-
             Circle OldShit = new Circle
             {
                 Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
@@ -351,6 +302,55 @@ namespace SocialNetwork.Application
             _circleService.CreateCircle(OldShit);
             _circleService.CreateCircle(People);
             _circleService.CreateCircle(Important);
+
+            User Jens = new User
+            {
+                Age = 23,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle> {OldShit},
+                Friends = new List<User>(),
+                Gender = 'm',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Jens Jensen"
+            };
+            User Sine = new User
+            {
+                Age = 15,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle> {People},
+                Friends = new List<User>(),
+                Gender = 'f',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Sine Sunesen"
+            };
+            User Perv = new User
+            {
+                Age = 45,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle> {Important},
+                Friends = new List<User>(),
+                Gender = 'm',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Perv Pervsen"
+            };
+            User Line = new User
+            {
+                Age = 34,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle> {Important},
+                Friends = new List<User>(),
+                Gender = 'f',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Line Lystig"
+            };
+
+            //Line has blocked Perv
+            Line.BlockedList.Add(Perv);
+
+            _userService.AddUser(Jens);
+            _userService.AddUser(Sine);
+            _userService.AddUser(Perv);
+            _userService.AddUser(Line);
 
             Post PostPs = new Post
             {
