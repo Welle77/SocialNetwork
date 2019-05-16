@@ -31,7 +31,7 @@ namespace SocialNetwork.Application
             Console.WriteLine("To see your feed, type 'Feed'");
             Console.WriteLine("To see your friends wall, type 'Wall'");
             Console.WriteLine("To create a post, type 'CPost'");
-            Console.WriteLine("To create a comment, type 'CComment'");
+            Console.WriteLine("To create a comment, type 'Comment'");
             Console.WriteLine("To join a circle, type JCircle");
             Console.WriteLine("To add a new friend, type AFriend");
             Console.WriteLine("To block a user, type BUser");
@@ -79,7 +79,7 @@ namespace SocialNetwork.Application
                         Console.WriteLine("To see your feed, type 'Feed'");
                         Console.WriteLine("To see your friends wall, type 'Wall'");
                         Console.WriteLine("To create a post, type 'CPost'");
-                        Console.WriteLine("To create a comment, type 'CComment'");
+                        Console.WriteLine("To create a comment, type 'Comment'");
                         Console.WriteLine("To join a circle, type 'JCircle'");
                         Console.WriteLine("To add a new friend, type AFriend");
                         Console.WriteLine("To block a user, type BUser");

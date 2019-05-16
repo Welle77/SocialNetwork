@@ -59,20 +59,14 @@ namespace SocialNetwork.Services
             //No concurrency safety (Should probably use some sort of Optimistic Concurrency framework instead)
             try
             {
-                postComment(post, commentToBeAdded);
+                post.Comments.Add(commentToBeAdded);
+                var result = _posts.ReplaceOne(p => p.Id == post.Id, post);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Something bad happened (Post might not exist)");
             }
         }
-
-        private void postComment(Post post, Comment commentToBeAdded)
-        {
-            post.Comments.Add(commentToBeAdded);
-            var result = _posts.ReplaceOne(p => p.Id == post.Id, post);
-        }
-
         public List<Post> GetPostsByAuthorId(string Id)
         {
             return _posts.Find(p => p.Author.Id == Id).ToList();
