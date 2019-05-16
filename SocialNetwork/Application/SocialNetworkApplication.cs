@@ -34,6 +34,7 @@ namespace SocialNetwork.Application
             Console.WriteLine("To join a circle, type JCircle");
             Console.WriteLine("To add a new friend, type AFriend");
             Console.WriteLine("To block a user, type BUser");
+            Console.WriteLine("To reset database, type Reset");
             Console.WriteLine("To see your options again, type 'Info'");
             LongAssSwitchStatement();
         }
