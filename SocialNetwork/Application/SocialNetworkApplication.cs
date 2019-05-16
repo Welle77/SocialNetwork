@@ -94,11 +94,15 @@ namespace SocialNetwork.Application
                         CreateComment();                          
 
                         break;
+                    case "JCircle":
+                        JoinCircle();
+                        break;
                     case "Info":
                         Console.WriteLine("To see your feed, type 'Feed'");
                         Console.WriteLine("To see your friends wall, type 'Wall'");
                         Console.WriteLine("To create a post, type 'CPost'");
                         Console.WriteLine("To create a comment, type 'CComment'");
+                        Console.WriteLine("To join a circle, type 'JCircle'");
                         break;
                     default:
                         Console.WriteLine("Command not found");
@@ -223,6 +227,11 @@ namespace SocialNetwork.Application
             };
 
             _postService.PostComment(feedPosts[postNumber-1].Id, commentToBeAdded);
+        }
+
+        private void JoinCircle()
+        {
+
         }
 
         #endregion
