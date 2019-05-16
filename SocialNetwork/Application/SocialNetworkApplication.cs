@@ -74,11 +74,12 @@ namespace SocialNetwork.Application
                             _postService.PrintPosts(list);
                         }
 
-                        foreach (var currentUserCircle in _userService.CurrentUser.Circles)
-                        {
-                            var list = _postService.GetPostsByCircleId(currentUserCircle.Id);
-                            _postService.PrintPosts(list);
-                        }
+                        //Console.WriteLine("Your circle feed looks like this");
+                        //foreach (var currentUserCircle in _userService.CurrentUser.Circles)
+                        //{
+                        //    var list = _postService.GetPostsByCircleId(currentUserCircle.Id);
+                        //    _postService.PrintPosts(list);
+                        //}
                         break;
 
                     case "Wall":
@@ -138,7 +139,25 @@ namespace SocialNetwork.Application
                         _postService.AddPost(post);
                         break;
                     case "Comment":
-                        
+                        Console.WriteLine("Which post do you want to comment on? Type the #");
+                        Console.WriteLine("Your public feed looks like this");
+                            foreach (var currentUserFriends in _userService.CurrentUser.Friends)
+                            {
+                                var list = _postService.GetPostsByAuthorId(currentUserFriends.Id);
+                                _postService.PrintPosts(list);
+                            }
+
+                        var postNumber = Console.ReadLine();
+                        Console.WriteLine("Enter your comment.");
+                        var comment = Console.ReadLine();
+                        var commentToBeAdded = new Comment()
+                        {
+                            Author = _userService.CurrentUser,
+                            Text = comment
+                        };
+
+                        _postService.PostComment(postNumber,commentToBeAdded);                            
+
                         break;
                     case "Info":
                         Console.WriteLine("To see your feed, type 'Feed'");
