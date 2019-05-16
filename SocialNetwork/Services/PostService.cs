@@ -94,5 +94,37 @@ namespace SocialNetwork.Services
         {
             Console.WriteLine("*******\n\n\n\n\n*******\nPicture of food");
         }
+
+        public List<Post> GetFeed(User user)
+        {
+            List<Post> FriendPostList = new List<Post>();
+            List<Post> CirclePostList = new List<Post>();
+            List<Post> ResultingList = new List<Post>();
+
+            foreach (var currentUserFriend in user.Friends)
+            {
+                FriendPostList.AddRange(GetPostsByAuthorId(currentUserFriend.Id));
+            }
+
+            foreach (var currentUserCircle in user.Circles)
+            {
+                CirclePostList.AddRange(GetPostsByCircleId(currentUserCircle.Id));
+            }
+
+            foreach (var feedPost in FriendPostList)
+            {
+                ResultingList.Add(feedPost);
+            }
+
+            foreach (var circlePost in CirclePostList)
+            {
+                if (!ResultingList.Contains(circlePost))
+                {
+                    ResultingList.Add(circlePost);
+                }
+            }
+
+            return ResultingList;
+        }
     }
 }
