@@ -100,7 +100,7 @@ namespace SocialNetwork.Services
             var circle = CurrentUser.Circles.Find(p => p.CircleName == name);
             return circle;
         }
-
+        
         public string GetUserIdByName(string name)
         {
             try
@@ -148,9 +148,25 @@ namespace SocialNetwork.Services
             return null;
         }
 
+        public List<User> GetAllOtherUsers()
+        {
+            return _users.Find(p => p.Id != CurrentUser.Id).ToList();
+        }
+
         public List<User> GetAllUsers()
         {
-            return _users.Find(users => true).ToList();
+            return _users.Find(p=>true).ToList();
+        }
+
+        public bool IsThisUserBlocked(string objectId)
+        {
+            var result = _users.Find(p => p.Id == objectId).ToList()[0];
+            if (result.BlockedList.Contains(CurrentUser))
+            {
+                return true;
+            }
+
+            return false;
         }
         
     }

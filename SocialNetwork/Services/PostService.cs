@@ -17,6 +17,7 @@ namespace SocialNetwork.Services
         {
             Client.DropCollection("Posts");
             _posts = Client.GetCollection<Post>("Posts");
+            CreateIndexes();
         }
 
         public void CreateIndexes()
@@ -79,7 +80,7 @@ namespace SocialNetwork.Services
 
         public List<Post> GetPostsByCircleId(string Id)
         {
-            return _posts.Find(p => p.AssociatedCircle == Id).ToList();
+            return _posts.Find(p => p.AssociatedCircle.Id == Id).ToList();
         }
 
         public void PrintPosts(List<Post> posts)

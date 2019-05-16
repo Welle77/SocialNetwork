@@ -23,8 +23,9 @@ namespace SocialNetwork.Application
 
         public void Start()
         {
-            SetUpCurrentUser();
             SeedDatabase();
+            SetUpCurrentUser();
+           
 
             Console.WriteLine("\nNavn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
             Console.WriteLine("To see your feed, type 'Feed'");
@@ -33,6 +34,7 @@ namespace SocialNetwork.Application
             Console.WriteLine("To create a comment, type 'CComment'");
             Console.WriteLine("To join a circle, type JCircle");
             Console.WriteLine("To add a new friend, type AFriend");
+            Console.WriteLine("To block a user, type BUser");
             Console.WriteLine("To see your options again, type 'Info'");
             LongAssSwitchStatement();
         }
@@ -70,6 +72,9 @@ namespace SocialNetwork.Application
                     case "AFriend":
                         AddFriend();
                         break;
+                    case "BUser":
+                        BlockUser();
+                        break;
                     case "Info":
                         Console.WriteLine("To see your feed, type 'Feed'");
                         Console.WriteLine("To see your friends wall, type 'Wall'");
@@ -77,6 +82,7 @@ namespace SocialNetwork.Application
                         Console.WriteLine("To create a comment, type 'CComment'");
                         Console.WriteLine("To join a circle, type 'JCircle'");
                         Console.WriteLine("To add a new friend, type AFriend");
+                        Console.WriteLine("To block a user, type BUser");
                         break;
                     default:
                         Console.WriteLine("Command not found");
@@ -108,19 +114,27 @@ namespace SocialNetwork.Application
         private void PrintUserWall()
         {
             Console.WriteLine("Type the name of the users wall you want to see.");
-            _userService.PrintUserFriends();
+
+            var list = _userService.GetAllUsers();
+            foreach (var user in list)
+            {
+                Console.WriteLine(user.Name);
+            }
 
             var nameOfUser = Console.ReadLine();
             var userId = _userService.GetUserIdByName(nameOfUser);
 
             if (userId != null)
             {
-                var wallPosts = _postService.GetPostsByAuthorId(userId);
-                _postService.PrintPosts(wallPosts);
-            }
-            else
-            {
-                Console.WriteLine("User not found");
+                if (!_userService.IsThisUserBlocked(userId))
+                {
+                    var wallPosts = _postService.GetPostsByAuthorId(userId);
+                    _postService.PrintPosts(wallPosts);
+                }
+                else
+                {
+                    Console.WriteLine("User has blocked you");
+                }
             }
         }
 
@@ -224,14 +238,22 @@ namespace SocialNetwork.Application
         private void AddFriend()
         {
             Console.WriteLine("Type the name of the new friend you want to add");
-            var users = _userService.GetAllUsers();
+            var users = _userService.GetAllOtherUsers();
             foreach (var user in users)
             {
                 Console.WriteLine(user.Name);
             }
 
             var input = Console.ReadLine();
+            string userId = _userService.GetUserIdByName(input);
 
+            if (userId == null)
+            {
+                Console.WriteLine("User does not exist");
+                return;
+            }
+
+            _userService.AddFriend(userId); 
         }
 
         private void SeedDatabase()
@@ -276,6 +298,9 @@ namespace SocialNetwork.Application
                 Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
                 Name = "Line Lystig"
             };
+
+            //Line has blocked Perv
+            Line.BlockedList.Add(Perv);
 
             _userService.AddUser(Jens);
             _userService.AddUser(Sine);
@@ -360,35 +385,44 @@ namespace SocialNetwork.Application
 
         private void SetUpCurrentUser()
         {
-            User newUser = new User { Id = ObjectId.GenerateNewId(DateTime.Now).ToString(), BlockedList = new List<User>(), Circles = new List<Circle>(), Friends = new List<User>() };
-            Console.WriteLine("What is your name?");
-            var inputName = Console.ReadLine();
-            newUser.Name = inputName;
-            Console.WriteLine("What is your age?");
-            var inputAge = Console.ReadLine();
-
-            try
+            bool confirmed = false;
+            do
             {
-                newUser.Age = int.Parse(inputAge);
-            }
-            catch (Exception e)
+                Console.WriteLine("Type the name of the user you want to log in as");
+                var list = _userService.GetAllUsers();
+                foreach (var user in list)
+                {
+                    Console.WriteLine(user.Name);
+                }
+
+                var input = Console.ReadLine();
+                var userId = _userService.GetUserIdByName(input);
+                if (userId != null)
+                {
+                    _userService.CurrentUser = _userService.GetUser(userId);
+                    confirmed = true;
+                }
+            } while (confirmed == false);
+
+        }
+
+        private void BlockUser()
+        {
+            Console.WriteLine("Type the name of the user, you want to block");
+            var list = _userService.GetAllOtherUsers();
+            foreach (var user in list)
             {
-                Console.WriteLine("Age value not valid. Your age is set to 18");
-                newUser.Age = 18;
+                Console.WriteLine(user.Name);
             }
 
-            Console.WriteLine("Type f for female, m for male (Yes there are only two genders)");
-            var inputGender = Console.ReadKey();
+            var input = Console.ReadLine();
 
-            if (inputGender.KeyChar == 'm' || inputGender.KeyChar == 'f')
-                newUser.Gender = inputGender.KeyChar;
-            else
+            var userId = _userService.GetUserIdByName(input);
+
+            if (userId != null)
             {
-                newUser.Gender = 'u';
+                _userService.BlockUser(userId);
             }
-
-            _userService.AddUser(newUser);
-            _userService.CurrentUser = newUser;
         }
 
         #endregion
