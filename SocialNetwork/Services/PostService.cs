@@ -84,10 +84,10 @@ namespace SocialNetwork.Services
 
         public void PrintPosts(List<Post> posts)
         {
+            int i = 0;
             foreach (var post in posts)
             {
-                var i = 0;
-                Console.Write("Post #" + ++i);
+                Console.Write("Post #" + ++i+" ");
                 if(post.ContentType == "image")
                     PrintPicturePost(post);
                 else if(post.ContentType == "text")
@@ -96,16 +96,20 @@ namespace SocialNetwork.Services
                 {
                     Console.WriteLine("This post has no Type");
                 }
-                }
+            }
         }
 
         public void PrintTextPost(Post post)
         {
+            if(post.AssociatedCircle.CircleName!=null)
+                Console.WriteLine("Posted in the circle " + post.AssociatedCircle.CircleName+":");
             Console.WriteLine( "The textpost contains " + post.Content);
         }
 
         public void PrintPicturePost(Post post)
         {
+            if(post.AssociatedCircle.CircleName != null)
+                Console.WriteLine("Posted in the circle " + post.AssociatedCircle.CircleName+":");
             Console.WriteLine("****************************************\n\n\n");
             Console.WriteLine("***\t" + post.Content + "\t***");
             Console.WriteLine("\n\n\n****************************************");

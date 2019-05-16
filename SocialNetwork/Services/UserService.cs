@@ -147,6 +147,11 @@ namespace SocialNetwork.Services
 
             return null;
         }
+
+        public List<User> GetAllUsers()
+        {
+            return _users.Find(users => true).ToList();
+        }
         
     }
 }

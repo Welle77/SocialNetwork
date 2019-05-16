@@ -20,49 +20,19 @@ namespace SocialNetwork.Application
             _postService = new PostService();
         }
 
-        private void SetUpCurrentUser()
-        {
-            User newUser = new User { Id=ObjectId.GenerateNewId(DateTime.Now).ToString(),BlockedList = new List<User>(),Circles=new List<Circle>(),Friends=new List<User>()};
-            Console.WriteLine("What is your name?");
-            var inputName = Console.ReadLine();
-            newUser.Name = inputName;
-            Console.WriteLine("What is your age?");
-            var inputAge = Console.ReadLine();
-
-            try
-            {
-                newUser.Age = int.Parse(inputAge);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Age value not valid. Your age is set to 18");
-                newUser.Age = 18;
-            }
-            
-            Console.WriteLine("Type f for female, m for male (Yes there are only two genders)");
-            var inputGender = Console.ReadKey();
-
-            if(inputGender.KeyChar=='m' || inputGender.KeyChar=='f')
-                newUser.Gender = inputGender.KeyChar;
-            else
-            {
-                newUser.Gender = 'u';
-            }
-
-            _userService.AddUser(newUser);
-            _userService.CurrentUser = newUser;
-        }
-
 
         public void Start()
         {
             SetUpCurrentUser();
+            SeedDatabase();
 
             Console.WriteLine("\nNavn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
             Console.WriteLine("To see your feed, type 'Feed'");
             Console.WriteLine("To see your friends wall, type 'Wall'");
             Console.WriteLine("To create a post, type 'CPost'");
             Console.WriteLine("To create a comment, type 'CComment'");
+            Console.WriteLine("To join a circle, type JCircle");
+            Console.WriteLine("To add a new friend, type AFriend");
             Console.WriteLine("To see your options again, type 'Info'");
             LongAssSwitchStatement();
         }
@@ -97,12 +67,16 @@ namespace SocialNetwork.Application
                     case "JCircle":
                         JoinCircle();
                         break;
+                    case "AFriend":
+                        AddFriend();
+                        break;
                     case "Info":
                         Console.WriteLine("To see your feed, type 'Feed'");
                         Console.WriteLine("To see your friends wall, type 'Wall'");
                         Console.WriteLine("To create a post, type 'CPost'");
                         Console.WriteLine("To create a comment, type 'CComment'");
                         Console.WriteLine("To join a circle, type 'JCircle'");
+                        Console.WriteLine("To add a new friend, type AFriend");
                         break;
                     default:
                         Console.WriteLine("Command not found");
@@ -111,8 +85,8 @@ namespace SocialNetwork.Application
             } while (true);
         }
 
-        #region Helpers
 
+        #region Helpers
         private string GetContentType()
         {
             string contentType;
@@ -170,7 +144,7 @@ namespace SocialNetwork.Application
             if (circleCPost != "")
             {
                 var circle = _userService.GetUserCircleByName(circleCPost);
-                associatedCircle = _circleService.GetCircle(circle.Id);
+                associatedCircle = _circleService.GetCircleById(circle.Id);
             }
 
             Console.WriteLine("Choose the type of Content. The supported type is image, text");
@@ -229,15 +203,35 @@ namespace SocialNetwork.Application
             _postService.PostComment(feedPosts[postNumber-1].Id, commentToBeAdded);
         }
 
-        private string ContentType()
+        private void JoinCircle()
         {
-            string contentType;
-            do
-            {
-                contentType = Console.ReadLine();
-            } while (contentType != "image" || contentType != "text");
+            Console.WriteLine("Type the name of the circle you want to join:");
+            var listOfCircles = _circleService.GetCircles();
+            _circleService.PrintCircles(listOfCircles);
 
-            return contentType;
+            var input = Console.ReadLine();
+            var circle= _circleService.GetCircleByName(input);
+
+            if (circle == null)
+            {
+                Console.WriteLine("Circle does not exist");
+                return;
+            }
+
+            _userService.SignUpForCircle(circle);
+        }
+
+        private void AddFriend()
+        {
+            Console.WriteLine("Type the name of the new friend you want to add");
+            var users = _userService.GetAllUsers();
+            foreach (var user in users)
+            {
+                Console.WriteLine(user.Name);
+            }
+
+            var input = Console.ReadLine();
+
         }
 
         private void SeedDatabase()
@@ -356,6 +350,47 @@ namespace SocialNetwork.Application
                 ContentType = "image",
                 Id = ObjectId.GenerateNewId(DateTime.Now).ToString()
             };
+
+            _postService.AddPost(PostImageOldShit);
+            _postService.AddPost(PostImportant2);
+            _postService.AddPost(PostImportant1);
+            _postService.AddPost(PostPs);
+            _postService.AddPost(PostSine);
         }
+
+        private void SetUpCurrentUser()
+        {
+            User newUser = new User { Id = ObjectId.GenerateNewId(DateTime.Now).ToString(), BlockedList = new List<User>(), Circles = new List<Circle>(), Friends = new List<User>() };
+            Console.WriteLine("What is your name?");
+            var inputName = Console.ReadLine();
+            newUser.Name = inputName;
+            Console.WriteLine("What is your age?");
+            var inputAge = Console.ReadLine();
+
+            try
+            {
+                newUser.Age = int.Parse(inputAge);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Age value not valid. Your age is set to 18");
+                newUser.Age = 18;
+            }
+
+            Console.WriteLine("Type f for female, m for male (Yes there are only two genders)");
+            var inputGender = Console.ReadKey();
+
+            if (inputGender.KeyChar == 'm' || inputGender.KeyChar == 'f')
+                newUser.Gender = inputGender.KeyChar;
+            else
+            {
+                newUser.Gender = 'u';
+            }
+
+            _userService.AddUser(newUser);
+            _userService.CurrentUser = newUser;
+        }
+
+        #endregion
     }
 }

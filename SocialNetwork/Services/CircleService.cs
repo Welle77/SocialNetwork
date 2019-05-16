@@ -20,12 +20,12 @@ namespace SocialNetwork.Services
             _circles = Client.GetCollection<Circle>("Circles");
         }
 
-        public List<Circle> Get()
+        public List<Circle> GetCircles()
         {
             return _circles.Find(circles => true).ToList();
         }
 
-        public Circle GetCircle(string circleid)
+        public Circle GetCircleById(string circleid)
         {
             try
             {
@@ -36,6 +36,21 @@ namespace SocialNetwork.Services
             {
                 Console.WriteLine("Something bad happened (Circle might not exist)");
             }
+            return null;
+        }
+
+        public Circle GetCircleByName(string name)
+        {
+            try
+            {
+                var result = _circles.Find(p => p.CircleName == name).ToList()[0];
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Something bad happened (Circle might not exist)");
+            }
+
             return null;
         }
        
@@ -49,5 +64,12 @@ namespace SocialNetwork.Services
             _circles.DeleteOne(circle => circle.Id == id);
         }
 
+        public void PrintCircles(List<Circle> circles)
+        {
+            foreach (var circle in circles)
+            {
+                Console.WriteLine(circle.CircleName);
+            }
+        }
     }
 }
