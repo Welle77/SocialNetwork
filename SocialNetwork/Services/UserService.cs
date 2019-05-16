@@ -14,10 +14,10 @@ namespace SocialNetwork.Services
         public readonly User CurrentUser;
         private readonly IMongoCollection<User> _users;
 
-        public UserService(string objectId)
+        public UserService(string name)
         {
             _users = Client.GetCollection<User>("Users");
-            CurrentUser = _users.Find(p => p.Id == objectId).ToList()[0];
+            CurrentUser = _users.Find(p => p.Name == name).ToList()[0];
         }
 
         public void AddUser(User userToBeAdded)
@@ -94,6 +94,20 @@ namespace SocialNetwork.Services
             _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
         }
 
+        public string GetUserByName(string name)
+        {
+            try
+            {
+                var user = _users.Find(p => p.Name == name).ToList()[0];
+                return user.Name;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("User not found");
+            }
+
+            return null;
+        }
 
         public User GetUser(string objectId)
         {
