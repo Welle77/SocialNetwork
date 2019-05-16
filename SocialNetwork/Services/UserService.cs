@@ -160,9 +160,13 @@ namespace SocialNetwork.Services
         public bool IsThisUserBlocked(string objectId)
         {
             var result = _users.Find(p => p.Id == objectId).ToList()[0];
-            if (result.BlockedList.Contains(CurrentUser))
+
+            foreach (var person in result.BlockedList)
             {
-                return true;
+                if (person.Id == CurrentUser.Id)
+                {
+                    return true;
+                }
             }
 
             return false;

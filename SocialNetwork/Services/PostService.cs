@@ -104,6 +104,7 @@ namespace SocialNetwork.Services
         {
             if(post.AssociatedCircle.CircleName!=null)
                 Console.WriteLine("Posted in the circle " + post.AssociatedCircle.CircleName+":");
+            Console.WriteLine("Posted by: " + post.Author.Name);
             Console.WriteLine( "The textpost contains " + post.Content);
         }
 
@@ -111,6 +112,7 @@ namespace SocialNetwork.Services
         {
             if(post.AssociatedCircle.CircleName != null)
                 Console.WriteLine("Posted in the circle " + post.AssociatedCircle.CircleName+":");
+            Console.WriteLine("Posted by: " + post.Author.Name);
             Console.WriteLine("****************************************\n\n\n");
             Console.WriteLine("***\t" + post.Content + "\t***");
             Console.WriteLine("\n\n\n****************************************");
@@ -134,18 +136,36 @@ namespace SocialNetwork.Services
 
             foreach (var feedPost in FriendPostList)
             {
-                if (!feedPost.Author.BlockedList.Contains(user))
-                    ResultingList.Add(feedPost);
+                bool isBlocked = false;
+
+                foreach (var person in feedPost.Author.BlockedList)
+                {
+                    if (person.Id == user.Id)
+                    {
+                        isBlocked = true;
+                    }
+                }
+
+                if(!isBlocked)
+                    ResultingList.Add(feedPost);      
             }
 
             foreach (var circlePost in CirclePostList)
             {
-                if (!ResultingList.Contains(circlePost))
+                bool isBlocked = false;
+
+                foreach (var person in circlePost.Author.BlockedList)
                 {
-                    if (!circlePost.Author.BlockedList.Contains(user))
-                        ResultingList.Add(circlePost);
+                    if (person.Id == user.Id)
+                    {
+                        isBlocked = true;
+                    }
                 }
+
+                if (!isBlocked)
+                    ResultingList.Add(circlePost);
             }
+
             return ResultingList;
         }
     }
