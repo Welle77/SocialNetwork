@@ -80,5 +80,13 @@ namespace SocialNetwork.Services
         {
             return _posts.Find(p => p.AssociatedCircle.Id == Id).ToList();
         }
+
+        public void PrintPost(List<Post> posts)
+        {
+            foreach (var post in posts)
+            {
+                Console.WriteLine("The post of type " + post.ContentType +" contains " + post.Content);
+            }
+        }
     }
 }

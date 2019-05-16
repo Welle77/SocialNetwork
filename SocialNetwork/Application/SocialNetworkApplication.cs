@@ -49,10 +49,30 @@ namespace SocialNetwork.Application
                 switch (input)
                 {
                     case "Feed":
-                        //Query
+                        Console.WriteLine("Your public feed looks like this:");
+                        foreach (var currentUserFriend in _userService.CurrentUser.Friends)
+                        {
+                            var list = _postService.GetPostsByAuthorId(currentUserFriend.Id);         
+                            _postService.PrintPost(list);
+                        }
+
+                        Console.WriteLine("Your circle feed looks like this");
+                        foreach (var currentUserCircle in _userService.CurrentUser.Circles)
+                        {
+                            var list = _postService.GetPostsByCircleId(currentUserCircle.Id);
+                            _postService.PrintPost(list);
+                        }
+                        
                         break;
                     case "Wall":
-                        //Query
+                        Console.WriteLine("Type the name of the users wall you want to see:");
+                        foreach (var currentUserFriend in _userService.CurrentUser.Friends)
+                        {
+                            Console.WriteLine(currentUserFriend.Name);
+                        }
+                        var name = Console.ReadLine();
+
+
                         break;
                     case "Circles":
                         //Query
