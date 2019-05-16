@@ -16,8 +16,9 @@ namespace SocialNetwork.Services
         public CircleService()
         {
             Client.DropCollection("Circles");
-            SeedDatabase();
+            
             _circles = Client.GetCollection<Circle>("Circles");
+            SeedDatabase();
         }
 
         private void SeedDatabase()

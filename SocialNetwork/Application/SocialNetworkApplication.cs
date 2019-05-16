@@ -16,13 +16,13 @@ namespace SocialNetwork.Application
         public SocialNetworkApplication()
         {
             _userService=new UserService();
-            _postService=new PostService();
             _circleService = new CircleService();
+            _postService = new PostService();
         }
 
         private void SetUpCurrentUser()
         {
-            User newUser = new User { Id=ObjectId.GenerateNewId(DateTime.Now).ToString()};
+            User newUser = new User { Id=ObjectId.GenerateNewId(DateTime.Now).ToString(),BlockedList = new List<User>(),Circles=new List<Circle>(),Friends=new List<User>()};
             Console.WriteLine("What is your name?");
             var inputName = Console.ReadLine();
             newUser.Name = inputName;
