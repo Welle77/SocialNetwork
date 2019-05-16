@@ -94,6 +94,20 @@ namespace SocialNetwork.Services
             _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
         }
 
+        public string GetUserByName(string name)
+        {
+            try
+            {
+                var user = _users.Find(p => p.Name == name).ToList()[0];
+                return user.Name;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("User not found");
+            }
+
+            return null;
+        }
 
         public User GetUser(string objectId)
         {

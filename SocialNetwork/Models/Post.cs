@@ -20,6 +20,9 @@ namespace SocialNetwork.Models
         [BsonElement("Content")]
         public string Content { get; set; }
 
+        [BsonElement("ContentType")]
+        public string ContentType { get; set; }
+
         [BsonElement("Circle")]
         public Circle AssociatedCircle { get; set; }
 

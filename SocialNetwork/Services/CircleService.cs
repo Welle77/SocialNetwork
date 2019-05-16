@@ -11,7 +11,8 @@ namespace SocialNetwork.Services
     public class CircleService : BaseService
     {
         private readonly IMongoCollection<Circle> _circles;
- public CircleService()
+
+        public CircleService()
         {
             _circles = Client.GetCollection<Circle>("Circles");
         }
@@ -35,9 +36,9 @@ namespace SocialNetwork.Services
             return null;
         }
        
-        public void CreateCircle(Circle circles)
+        public void CreateCircle(Circle circle)
         {
-            _circles.InsertOne(circles);
+            _circles.InsertOne(circle);
         }
         public void RemoveCircle(string id)
         {

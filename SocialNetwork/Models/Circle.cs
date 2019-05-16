@@ -17,5 +17,7 @@ namespace SocialNetwork.Models
         [BsonElement("Members")]
         public List<User> Members { get; set; }
 
+        [BsonElement("CircleName")]
+        public string CircleName { get; set; }
     }
 }
