@@ -25,7 +25,22 @@ namespace SocialNetwork.Services
             CreateCircle(new Circle
             {
                 Id=ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                CircleName = "Buy and sell old shit",
+                Members=new List<User>(),
+            });
 
+            CreateCircle(new Circle
+            {
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                CircleName = "Meet new people",
+                Members = new List<User>(),
+            });
+
+            CreateCircle(new Circle
+            {
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                CircleName = "Discuss important things",
+                Members = new List<User>(),
             });
         }
 
