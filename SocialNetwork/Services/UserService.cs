@@ -129,11 +129,23 @@ namespace SocialNetwork.Services
             }
         }
 
-        public void PrintUserFriends()
+        public void PrintAllUsers()
         {
-            foreach (var friend in CurrentUser.Friends)
+            List<User> users = GetAllUsers();
+
+            foreach (var user in users)
             {               
-                Console.WriteLine(friend.Name);
+                Console.WriteLine(user.Name);
+            }
+        }
+
+        public void PrintAllOtherUsers()
+        {
+            List<User> users = GetAllOtherUsers();
+
+            foreach (var user in users)
+            {
+                Console.WriteLine(user.Name);
             }
         }
 
