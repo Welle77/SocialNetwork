@@ -94,6 +94,21 @@ namespace SocialNetwork.Services
             _users.ReplaceOne(p => p.Id == CurrentUser.Id, CurrentUser);
         }
 
+        public string GetCircleByName(string name)
+        {
+            try
+            {
+                var user = _users.Find(p => p.Name == name).ToList()[0];
+                return user.Name;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Circle not found");
+            }
+
+            return null;
+        }
+
         public string GetUserByName(string name)
         {
             try

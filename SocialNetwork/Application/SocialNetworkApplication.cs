@@ -15,14 +15,14 @@ namespace SocialNetwork.Application
 
         public SocialNetworkApplication(string name)
         {
-            _userService=new UserService(name);
-            _postService=new PostService();
+            _userService = new UserService(name);
+            _postService = new PostService();
             _circleService = new CircleService();
         }
 
         public void Start()
         {
-            Console.WriteLine("Navn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
+            Console.WriteLine("Navn: " + _userService.CurrentUser.Name + "\nAlder: " + _userService.CurrentUser.Age + "\n");
             Console.WriteLine("To see your feed, type 'Feed'");
             Console.WriteLine("To see your friends wall, type 'Wall'");
             Console.WriteLine("To create a post, type 'CPost'");
@@ -44,37 +44,67 @@ namespace SocialNetwork.Application
                         Console.WriteLine("Your public feed looks like this:");
                         foreach (var currentUserFriend in _userService.CurrentUser.Friends)
                         {
-                            var list = _postService.GetPostsByAuthorId(currentUserFriend.Id);         
-                            _postService.PrintPost(list);
+                            var list = _postService.GetPostsByAuthorId(currentUserFriend.Id);
+                            _postService.PrintPosts(list);
                         }
 
                         Console.WriteLine("Your circle feed looks like this");
                         foreach (var currentUserCircle in _userService.CurrentUser.Circles)
                         {
                             var list = _postService.GetPostsByCircleId(currentUserCircle.Id);
-                            _postService.PrintPost(list);
+                            _postService.PrintPosts(list);
                         }
-                        
                         break;
+
                     case "Wall":
-                        Console.WriteLine("Type the name of the users wall you want to see:");
+                        Console.WriteLine("Type the name of the users wall you want to see.");
                         foreach (var currentUserFriend in _userService.CurrentUser.Friends)
                         {
                             Console.WriteLine(currentUserFriend.Name);
                         }
-                        var name = Console.ReadLine();
 
+                        var nameOfWall = Console.ReadLine();
+                        var userId = _userService.GetUserByName(nameOfWall);
 
+                        var wallPosts = _postService.GetPostsByAuthorId(userId);
+                        _postService.PrintPosts(wallPosts);
                         break;
+
                     case "Circles":
-                        //Query
+                        Console.WriteLine("Type the name of the circle you want to see the feed for.");
+                        foreach (var currentUserCircle in _userService.CurrentUser.Circles)
+                        {
+                            Console.WriteLine(currentUserCircle.CircleName);
+                        }
+
+                        var nameOfCircle = Console.ReadLine();
+                        var circleId = _userService.GetCircleByName(nameOfCircle);
+
+                        var circlePosts = _postService.GetPostsByCircleId(circleId);
+                        _postService.PrintPosts(circlePosts);
+
+
                         break;
                     case "CPost":
-                        //Query
-                    break;
+                        Console.WriteLine("If this is part of a circle, type in the name of the circle. Otherwise just press enter.");
+                        var circleCPost = Console.ReadLine();
+                        Circle associatedCircle = null;
+                        if (circleCPost != "")
+                        {
+                            var circleByName = _userService.GetCircleByName(circleCPost);
+                            
+                        }
+                        Console.WriteLine("Choose the type of Content. The supported type is image, text");
+                        var contentType = ContentType();
+                        Console.WriteLine("Type the content of the post");
+
+
+                        var post = new Post(){ContentType = contentType, AssociatedCircle =};
+                        _postService.AddPost(post);
+                        break;
                     case "Comment":
                         //Query
-                    break;
+                        break;
                     case "Info":
                         Console.WriteLine("To see your feed, type 'Feed'");
                         Console.WriteLine("To see your friends wall, type 'Wall'");
@@ -86,6 +116,17 @@ namespace SocialNetwork.Application
                         break;
                 }
             } while (true);
+        }
+
+        private string ContentType()
+        {
+            string contentType;
+            do
+            {
+                contentType = Console.ReadLine();
+            } while (contentType != "image" || contentType != "text");
+
+            return contentType;
         }
     }
 }
