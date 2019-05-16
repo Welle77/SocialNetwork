@@ -17,9 +17,13 @@ namespace SocialNetwork.Services
 
         public UserService()
         {
-            Client.DropCollection("Users");
             _users = Client.GetCollection<User>("Users");
             CreateIndex();
+        }
+
+        public void Drop()
+        {
+            Client.DropCollection("Users");
         }
 
         public void AddUser(User userToBeAdded)

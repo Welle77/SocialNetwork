@@ -15,9 +15,13 @@ namespace SocialNetwork.Services
 
         public PostService()
         {
-            Client.DropCollection("Posts");
             _posts = Client.GetCollection<Post>("Posts");
             CreateIndexes();
+        }
+
+        public void Drop()
+        {
+            Client.DropCollection("Posts");
         }
 
         public void CreateIndexes()
