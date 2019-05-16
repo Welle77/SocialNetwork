@@ -31,7 +31,7 @@ namespace SocialNetwork.Services
 
             //Index on associatedCircles CircleId
             var indexKeysCircle = Builders<Post>.IndexKeys;
-            var indexModelCircle = new CreateIndexModel<Post>(indexKeysCircle.Ascending(p => p.AssociatedCircle.Id));
+            var indexModelCircle = new CreateIndexModel<Post>(indexKeysCircle.Ascending(p => p.AssociatedCircle));
             _posts.Indexes.CreateOne(indexModelCircle);
         }
 
@@ -79,7 +79,7 @@ namespace SocialNetwork.Services
 
         public List<Post> GetPostsByCircleId(string Id)
         {
-            return _posts.Find(p => p.AssociatedCircle.Id == Id).ToList();
+            return _posts.Find(p => p.AssociatedCircle == Id).ToList();
         }
 
         public void PrintPosts(List<Post> posts)
