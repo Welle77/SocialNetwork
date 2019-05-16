@@ -117,19 +117,29 @@ namespace SocialNetwork.Application
                         Circle associatedCircle = null;
                         if (circleCPost != "")
                         {
-                            var circleByName = _userService.GetCircleByName(circleCPost);
-                            
+                            var circle = _userService.GetCircleByName(circleCPost);
+                            associatedCircle = _circleService.GetCircle(circle);
                         }
+
                         Console.WriteLine("Choose the type of Content. The supported type is image, text");
                         var contentType = ContentType();
+
                         Console.WriteLine("Type the content of the post");
+                        var contentCPost = Console.ReadLine();
 
+                        var post = new Post
+                        {
+                            ContentType = contentType,
+                            AssociatedCircle = associatedCircle,
+                            Content = contentCPost,
+                            Author = _userService.CurrentUser,
+                            Comments = null
+                        };
 
-                        var post = new Post(){ContentType = contentType, AssociatedCircle =};
                         _postService.AddPost(post);
                         break;
                     case "Comment":
-                        //Query
+                        
                         break;
                     case "Info":
                         Console.WriteLine("To see your feed, type 'Feed'");

@@ -147,8 +147,8 @@ namespace SocialNetwork.Services
         {
             try
             {
-                var user = _users.Find(p => p.Name == name).ToList()[0];
-                return user.Name;
+                var circle = _users.Find(p => p.Name == name).ToList()[0];
+                return circle.Id;
             }
             catch (Exception e)
             {
@@ -163,7 +163,7 @@ namespace SocialNetwork.Services
             try
             {
                 var user = _users.Find(p => p.Name == name).ToList()[0];
-                return user.Name;
+                return user.Id;
             }
             catch (Exception e)
             {
