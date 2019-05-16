@@ -24,18 +24,18 @@ namespace SocialNetwork.Application
 
         public void Start()
         {
-            SeedDatabase();
+            //SeedDatabase();
             SetUpCurrentUser();
-           
 
             Console.WriteLine("\nNavn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
             Console.WriteLine("To see your feed, type 'Feed'");
             Console.WriteLine("To see your friends wall, type 'Wall'");
             Console.WriteLine("To create a post, type 'CPost'");
-            Console.WriteLine("To create a comment, type 'CComment'");
+            Console.WriteLine("To create a comment, type 'Comment'");
             Console.WriteLine("To join a circle, type JCircle");
             Console.WriteLine("To add a new friend, type AFriend");
             Console.WriteLine("To block a user, type BUser");
+            Console.WriteLine("To reset database, type Reset");
             Console.WriteLine("To see your options again, type 'Info'");
             LongAssSwitchStatement();
         }
@@ -49,6 +49,14 @@ namespace SocialNetwork.Application
 
                 switch (input)
                 {
+                    case "Reset":
+                        _postService.Drop();
+                        _userService.Drop();
+                        _circleService.Drop();
+
+                        SeedDatabase();
+                        SetUpCurrentUser();
+                        break;
                     case "Feed":
                         PrintFeed();
                         break;
@@ -80,10 +88,11 @@ namespace SocialNetwork.Application
                         Console.WriteLine("To see your feed, type 'Feed'");
                         Console.WriteLine("To see your friends wall, type 'Wall'");
                         Console.WriteLine("To create a post, type 'CPost'");
-                        Console.WriteLine("To create a comment, type 'CComment'");
+                        Console.WriteLine("To create a comment, type 'Comment'");
                         Console.WriteLine("To join a circle, type 'JCircle'");
                         Console.WriteLine("To add a new friend, type AFriend");
                         Console.WriteLine("To block a user, type BUser");
+                        Console.WriteLine("To reset database, type Reset");
                         break;
                     default:
                         Console.WriteLine("Command not found");
@@ -162,8 +171,16 @@ namespace SocialNetwork.Application
 
             if (circleCPost != "")
             {
-                var circle = _userService.GetUserCircleByName(circleCPost);
-                associatedCircle = _circleService.GetCircleById(circle.Id);
+                try
+                {
+                    var circle = _userService.GetUserCircleByName(circleCPost);
+                    associatedCircle = _circleService.GetCircleById(circle.Id);
+                }
+                catch (NullReferenceException)
+                {
+                    Console.WriteLine("Either that group doesn't exist or you aren't a memeber of it (Check the spelling)");
+                    Console.WriteLine("Setting the Post to public");
+                }
             }
 
             Console.WriteLine("Choose the type of Content. The supported type is image, text");

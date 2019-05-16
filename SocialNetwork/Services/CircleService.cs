@@ -15,9 +15,13 @@ namespace SocialNetwork.Services
 
         public CircleService()
         {
-            Client.DropCollection("Circles");
             _circles = Client.GetCollection<Circle>("Circles");
             CreateIndex();
+        }
+
+        public void Drop()
+        {
+            Client.DropCollection("Circles");
         }
 
         public List<Circle> GetCircles()
