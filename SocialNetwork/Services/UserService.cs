@@ -152,6 +152,13 @@ namespace SocialNetwork.Services
         {
             return _users.Find(users => true).ToList();
         }
-        
+
+        public void CreateIndex()
+        {
+            //Index on users name
+            var indexKeysName = Builders<User>.IndexKeys;
+            var indexModelName = new CreateIndexModel<User>(indexKeysName.Ascending(u => u.Name));
+            _users.Indexes.CreateOne(indexModelName);
+        }     
     }
 }
