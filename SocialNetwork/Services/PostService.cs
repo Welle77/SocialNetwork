@@ -87,12 +87,28 @@ namespace SocialNetwork.Services
             foreach (var post in posts)
             {
                 var i = 0;
-                Console.WriteLine("Post #" + ++i + ": The post of type " + post.ContentType +" contains " + post.Content);
-            }
+                Console.Write("Post #" + ++i);
+                if(post.ContentType == "image")
+                    PrintPicturePost(post);
+                else if(post.ContentType == "text")
+                    PrintTextPost(post);
+                else
+                {
+                    Console.WriteLine("This post has no Type");
+                }
+                }
         }
-        public void PrintPicture()
+
+        public void PrintTextPost(Post post)
         {
-            Console.WriteLine("*******\n\n\n\n\n*******\nPicture of food");
+            Console.WriteLine( "The textpost contains " + post.Content);
+        }
+
+        public void PrintPicturePost(Post post)
+        {
+            Console.WriteLine("****************************************\n\n\n");
+            Console.WriteLine("***\t" + post.Content + "\t***");
+            Console.WriteLine("\n\n\n****************************************");
         }
 
         public List<Post> GetFeed(User user)
