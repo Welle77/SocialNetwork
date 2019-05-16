@@ -24,7 +24,7 @@ namespace SocialNetwork.Models
         public string ContentType { get; set; }
 
         [BsonElement("Circle")]
-        public string AssociatedCircle { get; set; }
+        public Circle AssociatedCircle { get; set; }
 
         [BsonElement("Comments")]
         public List<Comment> Comments { get; set; }
