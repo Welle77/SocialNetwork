@@ -14,10 +14,10 @@ namespace SocialNetwork.Services
         public readonly User CurrentUser;
         private readonly IMongoCollection<User> _users;
 
-        public UserService(string objectId)
+        public UserService(string name)
         {
             _users = Client.GetCollection<User>("Users");
-            CurrentUser = _users.Find(p => p.Id == objectId).ToList()[0];
+            CurrentUser = _users.Find(p => p.Name == name).ToList()[0];
         }
 
         public void AddUser(User userToBeAdded)

@@ -13,19 +13,11 @@ namespace SocialNetwork.Application
         private readonly PostService _postService;
         private readonly CircleService _circleService;
 
-        public SocialNetworkApplication(string objectId)
+        public SocialNetworkApplication(string name)
         {
-            _userService=new UserService(objectId);
+            _userService=new UserService(name);
             _postService=new PostService();
             _circleService = new CircleService();
-
-            SetUpDatabase();
-        }
-
-        private void SetUpDatabase()
-        {
-            //Wipe database
-            //Seed database
         }
 
         public void Start()
