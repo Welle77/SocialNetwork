@@ -63,8 +63,10 @@ namespace SocialNetwork.Services
             _circles.InsertOne(circle);
         }
 
-        public void PrintCircles(List<Circle> circles)
+        public void PrintAllCircles()
         {
+            List<Circle> circles = GetCircles();
+
             foreach (var circle in circles)
             {
                 Console.WriteLine(circle.CircleName);

@@ -24,10 +24,9 @@ namespace SocialNetwork.Application
 
         public void Start()
         {
-            //SeedDatabase();
             SetUpCurrentUser();
 
-            Console.WriteLine("\nNavn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
+            Console.WriteLine("\nNavn: " + _userService.CurrentUser.Name + "\nAlder: " + _userService.CurrentUser.Age + "\n");
             Console.WriteLine("To see your feed, type 'Feed'");
             Console.WriteLine("To see your friends wall, type 'Wall'");
             Console.WriteLine("To create a post, type 'CPost'");
@@ -36,7 +35,6 @@ namespace SocialNetwork.Application
             Console.WriteLine("To add a new friend, type AFriend");
             Console.WriteLine("To block a user, type BUser");
             Console.WriteLine("To reset database, type Reset");
-            Console.WriteLine("To see your options again, type 'Info'");
             LongAssSwitchStatement();
         }
 
@@ -44,6 +42,7 @@ namespace SocialNetwork.Application
         {
             do
             {
+                Console.WriteLine("To see your options again, type 'Info'");
                 Console.Write("> ");
                 var input = Console.ReadLine();
 
@@ -125,11 +124,7 @@ namespace SocialNetwork.Application
         {
             Console.WriteLine("Type the name of the users wall you want to see.");
 
-            var list = _userService.GetAllUsers();
-            foreach (var user in list)
-            {
-                Console.WriteLine(user.Name);
-            }
+            _userService.PrintAllUsers();
 
             var nameOfUser = Console.ReadLine();
             var userId = _userService.GetUserIdByName(nameOfUser);
@@ -242,8 +237,8 @@ namespace SocialNetwork.Application
         private void JoinCircle()
         {
             Console.WriteLine("Type the name of the circle you want to join:");
-            var listOfCircles = _circleService.GetCircles();
-            _circleService.PrintCircles(listOfCircles);
+
+            _circleService.PrintAllCircles();
 
             var input = Console.ReadLine();
             var circle= _circleService.GetCircleByName(input);
@@ -260,11 +255,8 @@ namespace SocialNetwork.Application
         private void AddFriend()
         {
             Console.WriteLine("Type the name of the new friend you want to add");
-            var users = _userService.GetAllOtherUsers();
-            foreach (var user in users)
-            {
-                Console.WriteLine(user.Name);
-            }
+
+            _userService.PrintAllOtherUsers();
 
             var input = Console.ReadLine();
             string userId = _userService.GetUserIdByName(input);
@@ -443,11 +435,7 @@ namespace SocialNetwork.Application
         {
             Console.WriteLine("Type the name of the user, you want to block");
 
-            var list = _userService.GetAllOtherUsers();
-            foreach (var user in list)
-            {
-                Console.WriteLine(user.Name);
-            }
+            _userService.PrintAllOtherUsers();
 
             var input = Console.ReadLine();
 
