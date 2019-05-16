@@ -23,9 +23,8 @@ namespace SocialNetwork.Application
 
         public void Start()
         {
-            SeedDatabase();
+            //SeedDatabase();
             SetUpCurrentUser();
-           
 
             Console.WriteLine("\nNavn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
             Console.WriteLine("To see your feed, type 'Feed'");
@@ -48,6 +47,14 @@ namespace SocialNetwork.Application
 
                 switch (input)
                 {
+                    case "Reset":
+                        _postService.Drop();
+                        _userService.Drop();
+                        _circleService.Drop();
+
+                        SeedDatabase();
+                        SetUpCurrentUser();
+                        break;
                     case "Feed":
                         PrintFeed();
                         break;
@@ -83,6 +90,7 @@ namespace SocialNetwork.Application
                         Console.WriteLine("To join a circle, type 'JCircle'");
                         Console.WriteLine("To add a new friend, type AFriend");
                         Console.WriteLine("To block a user, type BUser");
+                        Console.WriteLine("To reset database, type Reset");
                         break;
                     default:
                         Console.WriteLine("Command not found");
