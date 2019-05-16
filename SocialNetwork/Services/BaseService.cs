@@ -16,7 +16,6 @@ namespace SocialNetwork.Services
         {
             var client = new MongoClient("mongodb://localhost:27017");
             var database = client.GetDatabase("SocialNetwork");
-            
             Client = database;
         }
     }

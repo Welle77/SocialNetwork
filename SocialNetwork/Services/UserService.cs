@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using SocialNetwork.Application;
 using SocialNetwork.Models;
@@ -11,13 +12,61 @@ namespace SocialNetwork.Services
 {
     public class UserService : BaseService
     {
-        public readonly User CurrentUser;
+        public User CurrentUser;
         private readonly IMongoCollection<User> _users;
 
-        public UserService(string name)
+        public UserService()
         {
+            Client.DropCollection("Users");
+            SeedDatabase();
             _users = Client.GetCollection<User>("Users");
-            CurrentUser = _users.Find(p => p.Name == name).ToList()[0];
+        }
+
+        private void SeedDatabase()
+        {
+            AddUser(new User
+            {
+                Age = 23,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle>(),
+                Friends = new List<User>(),
+                Gender = 'm',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Jens Jensen"
+            });
+
+            AddUser(new User
+            {
+                Age = 15,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle>(),
+                Friends = new List<User>(),
+                Gender = 'f',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Sine Sunesen"
+            });
+
+            AddUser(new User
+            {
+                Age = 45,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle>(),
+                Friends = new List<User>(),
+                Gender = 'm',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Perv Pervsen"
+            });
+
+            AddUser(new User
+            {
+                Age = 34,
+                BlockedList = new List<User>(),
+                Circles = new List<Circle>(),
+                Friends = new List<User>(),
+                Gender = 'f',
+                Id = ObjectId.GenerateNewId(DateTime.Now).ToString(),
+                Name = "Line Lystig"
+            });
         }
 
         public void AddUser(User userToBeAdded)

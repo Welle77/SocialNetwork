@@ -16,7 +16,7 @@ namespace SocialNetwork
         static void Main(string[] args)
         {
             
-            var app = new SocialNetworkApplication("Jesper Strøm");
+            var app = new SocialNetworkApplication();
             app.Start();
             
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using SocialNetwork.Models;
 
@@ -14,7 +15,18 @@ namespace SocialNetwork.Services
 
         public CircleService()
         {
+            Client.DropCollection("Circles");
+            SeedDatabase();
             _circles = Client.GetCollection<Circle>("Circles");
+        }
+
+        private void SeedDatabase()
+        {
+            CreateCircle(new Circle
+            {
+                Id=ObjectId.GenerateNewId(DateTime.Now).ToString(),
+
+            });
         }
 
         public List<Circle> Get()

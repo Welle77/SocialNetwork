@@ -15,6 +15,7 @@ namespace SocialNetwork.Services
 
         public PostService()
         {
+            Client.DropCollection("Posts");
             _posts = Client.GetCollection<Post>("Posts");
         }
 

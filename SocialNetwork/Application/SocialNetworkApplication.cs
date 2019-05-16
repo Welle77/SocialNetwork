@@ -13,15 +13,41 @@ namespace SocialNetwork.Application
         private readonly PostService _postService;
         private readonly CircleService _circleService;
 
-        public SocialNetworkApplication(string name)
+        public SocialNetworkApplication()
         {
-            _userService=new UserService(name);
+            _userService=new UserService();
             _postService=new PostService();
             _circleService = new CircleService();
         }
 
+        private void SetUpCurrentUser()
+        {
+            User newUser = new User { Id=ObjectId.GenerateNewId(DateTime.Now).ToString()};
+            Console.WriteLine("What is your name?");
+            var inputName = Console.ReadLine();
+            newUser.Name = inputName;
+            Console.WriteLine("What is your age?");
+            var inputAge = Console.ReadLine();
+            newUser.Age = int.Parse(inputAge);
+            Console.WriteLine("Type f for female, m for male (Yes there are only two genders)");
+            var inputGender = Console.ReadKey();
+
+            if(inputGender.KeyChar=='m' || inputGender.KeyChar=='f')
+                newUser.Gender = inputGender.KeyChar;
+            else
+            {
+                newUser.Gender = 'u';
+            }
+
+            _userService.AddUser(newUser);
+            _userService.CurrentUser = newUser;
+        }
+
+
         public void Start()
         {
+            SetUpCurrentUser();
+
             Console.WriteLine("Navn: " + _userService.CurrentUser.Name + "\nAlder: "+ _userService.CurrentUser.Age+"\n");
             Console.WriteLine("To see your feed, type 'Feed'");
             Console.WriteLine("To see your friends wall, type 'Wall'");
