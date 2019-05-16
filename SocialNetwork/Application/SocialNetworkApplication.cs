@@ -410,7 +410,7 @@ namespace SocialNetwork.Application
             bool confirmed = false;
             do
             {
-                Console.WriteLine("Type the name of the user you want to log in as");
+                Console.WriteLine("Type the name of the user you want to log in as or Reset to seed the Database");
                 var list = _userService.GetAllUsers();
                 foreach (var user in list)
                 {
@@ -418,11 +418,22 @@ namespace SocialNetwork.Application
                 }
 
                 var input = Console.ReadLine();
-                var userId = _userService.GetUserIdByName(input);
-                if (userId != null)
+                if (input != "Reset")
                 {
-                    _userService.CurrentUser = _userService.GetUser(userId);
-                    confirmed = true;
+                    var userId = _userService.GetUserIdByName(input);
+                    if (userId != null)
+                    {
+                        _userService.CurrentUser = _userService.GetUser(userId);
+                        confirmed = true;
+                    }
+                }
+                else
+                {
+                    _postService.Drop();
+                    _userService.Drop();
+                    _circleService.Drop();
+
+                    SeedDatabase();
                 }
             } while (confirmed == false);
 
