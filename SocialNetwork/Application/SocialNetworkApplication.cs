@@ -168,8 +168,16 @@ namespace SocialNetwork.Application
 
             if (circleCPost != "")
             {
-                var circle = _userService.GetUserCircleByName(circleCPost);
-                associatedCircle = _circleService.GetCircleById(circle.Id);
+                try
+                {
+                    var circle = _userService.GetUserCircleByName(circleCPost);
+                    associatedCircle = _circleService.GetCircleById(circle.Id);
+                }
+                catch (NullReferenceException)
+                {
+                    Console.WriteLine("Either that group doesn't exist or you aren't a memeber of it (Check the spelling)");
+                    Console.WriteLine("Setting the Post to public");
+                }
             }
 
             Console.WriteLine("Choose the type of Content. The supported type is image, text");
